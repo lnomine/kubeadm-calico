@@ -10,7 +10,7 @@ cat <<EOF | tee /etc/apt/sources.list.d/kubernetes.list
 deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 
-apt update ; apt install -y kubelet=$1 kubeadm=$1 kubectl=$1
+apt update ; apt install -y kubelet=$1-00 kubeadm=$1-00 kubectl=$1-00
 apt-mark hold kubelet kubeadm kubectl
 echo "br_netfilter" >> /etc/modules
 modprobe br_netfilter
@@ -26,7 +26,7 @@ ln -s /opt/cni/bin/ /usr/lib/cni
 
 if [ ! -z "$2" ];
 then
-kubeadm init --control-plane-endpoint "${loadbalancer}:5443" --upload-certs --pod-network-cidr=192.168.0.0/16
+kubeadm init --kubernetes-version $1 --control-plane-endpoint "${loadbalancer}:5443" --upload-certs --pod-network-cidr=192.168.0.0/16
 export KUBECONFIG=/etc/kubernetes/admin.conf
 echo "Waiting for Kubernetes API..."
 sleep 30
