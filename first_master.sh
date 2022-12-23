@@ -1,6 +1,6 @@
 #!/bin/bash
 
-kubeadm init --kubernetes-version $1 --control-plane-endpoint "${loadbalancer}:5443" --upload-certs --pod-network-cidr=192.168.0.0/16
+kubeadm init --kubernetes-version $1 --control-plane-endpoint "${loadbalancer}:6443" --upload-certs --pod-network-cidr=192.168.0.0/16
 export KUBECONFIG=/etc/kubernetes/admin.conf
 echo "Waiting for Kubernetes API..."
 sleep 30
