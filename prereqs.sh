@@ -23,3 +23,9 @@ EOF
 sysctl --system
 
 ln -s /opt/cni/bin/ /usr/lib/cni
+
+curl -sL https://github.com/containerd/containerd/releases/download/v1.6.14/containerd-1.6.14-linux-amd64.tar.gz -o containerd.tar.gz
+tar xzvf containerd.tar.gz
+systemctl stop containerd
+cp bin/* /usr/bin/
+systemctl start containerd
