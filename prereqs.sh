@@ -10,8 +10,14 @@ cat <<EOF | tee /etc/apt/sources.list.d/kubernetes.list
 deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 
+curl -sL https://github.com/containerd/containerd/releases/download/v1.6.14/containerd-1.6.14-linux-amd64.tar.gz -o containerd.tar.gz
+tar xzvf containerd.tar.gz -C /tmp && cd /tmp
+systemctl stop containerd
+cp bin/* /usr/bin/
+systemctl start containerd
+
 apt update ; apt install -y kubelet=$1-00 kubeadm=$1-00 kubectl=$1-00
-apt-mark hold kubelet kubeadm kubectl
+apt-mark hold kubelet kubeadm kubectl containerd
 echo "br_netfilter" >> /etc/modules
 modprobe br_netfilter
 
@@ -23,9 +29,3 @@ EOF
 sysctl --system
 
 ln -s /opt/cni/bin/ /usr/lib/cni
-
-curl -sL https://github.com/containerd/containerd/releases/download/v1.6.14/containerd-1.6.14-linux-amd64.tar.gz -o containerd.tar.gz
-tar xzvf containerd.tar.gz -C /tmp && cd /tmp
-systemctl stop containerd
-cp bin/* /usr/bin/
-systemctl start containerd
